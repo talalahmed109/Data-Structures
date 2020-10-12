@@ -32,21 +32,19 @@ void Display()
 }
 void selectionSort()
 {
-    // Traverse the List
+    
     Node* temp = head;
     while(temp)
     {
         Node* min = temp;
         Node* r = temp->next;
-
-        // Traverse the unsorted sublist
         while (r) {
             if (min->data > r->data)
                 min = r;
 
             r = r->next;
         }
-        // Swap Data
+        
         int x = temp->data;
         temp->data = min->data;
         min->data = x;
