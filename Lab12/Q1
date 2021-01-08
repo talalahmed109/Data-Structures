@@ -1,0 +1,194 @@
+#include<iostream>
+#include<stack>
+#include<queue>
+#define max 100
+using namespace std;
+class graph;
+class node
+{
+	int data;
+	node* next;
+public:
+	node(int value = 0)
+	{
+		data = value;
+		next = NULL;
+	}
+	friend graph;
+}*newnode, * temp;
+
+class graph
+{
+	node* list[max];
+	int visited[max];
+	int n;
+public:
+	graph(int no)
+	{
+		n = no;
+		for (int i = 1; i <= n; i++)
+		{
+			list[i] = NULL;
+			visited[i] = 0;
+		}
+	}
+	void create();
+	void display();
+	void DFS();
+	void BFS();
+	void visitInitialize()
+	{
+		for (int i = 1; i <= n; i++)
+		{
+			visited[i] = 0;
+		}
+
+	}
+};
+void graph::BFS()
+{
+	queue <int>q;
+	visitInitialize();
+	int v, flag;
+	cout << "\nEnter the vertex you want to start with:";
+	cin >> v;
+	q.push(v);
+	visited[v] = 1;
+	do
+	{
+		v = q.front();
+		q.pop();
+		cout << v << " ";
+		flag = 0;
+		temp = list[v];
+		while (temp != NULL)
+		{
+			if (visited[temp->data] == 0)
+			{
+
+				q.push(temp->data);
+				visited[temp->data] = 1;
+				flag = 1;
+			}
+
+			temp = temp->next;
+
+		}
+
+	} while (!q.empty());
+
+}
+void graph::DFS()
+{
+	stack <int>s;
+	visitInitialize();
+	int v, flag;
+	cout << "\nEnter the vertex you want to start with:";
+	cin >> v;
+	visited[v] = 1;
+	s.push(v);
+	cout << v << " ";
+	do
+	{
+		flag = 0;
+		temp = list[v];
+		while (temp != NULL)
+		{
+			if (visited[temp->data] == 0)
+			{
+				cout << temp->data << " ";
+				visited[temp->data] = 1;
+				s.push(temp->data);
+				v = temp->data;
+				flag = 1;
+				break;
+			}
+
+			temp = temp->next;
+		}
+
+		if (!s.empty() && flag == 0)
+		{
+			v = s.top();
+			s.pop();
+
+		}
+
+	} while (!s.empty());
+
+}
+void graph::create()
+{
+	int i, j;
+	char ans=' ';
+	for (i = 1; i <= n; i++)
+	{
+		list[i] = temp = new node(i);
+		for (j = 1; j <= n; j++)
+		{
+			if (i != j)
+			{
+				cout << "\nIs there a edge between " << i << " and " << j<<"?(y/n) ";
+				cin >> ans;
+			}
+			if ((ans == 'y' || ans == 'Y') && i != j)
+			{
+				newnode = new node(j);
+				temp->next = newnode;
+				temp = newnode;
+			}
+		}
+	}
+}
+
+void graph::display()
+{
+	for (int i = 1; i <= n; i++)
+	{
+		cout << endl;
+		temp = list[i];
+		while (temp != NULL)
+		{
+
+			cout << temp->data << "->";
+			temp = temp->next;
+
+		}
+	}
+}
+
+
+int main()
+{
+	int opt, n, weight = 0;
+	cout << "\n\tEnter the number of vertices: ";
+	cin >> n;
+	graph G1(n);
+	while (1)
+	{
+		
+		cout << "\n\t1. Create Graph\n"
+			"\t2. BFS\n"
+			"\t3. DFS\n"
+			"\t4. Exit\n"
+			"\tChoice: ";
+		cin >> opt;
+		if (opt == 1)
+		{
+			G1.create();
+			cout << "\n\t\tLIST REPRESENTATION\n" << endl;
+			G1.display();
+		}
+		if (opt == 2)
+		{
+			G1.BFS();
+		}
+		if (opt == 3)
+		{
+			G1.DFS();
+		}
+		if (opt == 0)
+			exit(0);
+	}
+	return 0;
+}
