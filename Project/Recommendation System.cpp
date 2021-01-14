@@ -87,53 +87,6 @@ public:
 			myfile.ignore();
 		}
 		myfile.close();
-
-		//myfile.open("islamabad.txt");
-		//if (!myfile)
-		//{
-		//	cout << "Unable to open file";
-		//}
-		//while (!myfile.eof())
-		//{
-		//	getline(myfile, name);
-		//	while (name == "")
-		//	{
-		//		getline(myfile, name);
-		//	}
-		//	myfile >> price;
-		//	insert(name, price);
-		//}
-		//myfile.open("lahore.txt");
-		//if (!myfile)
-		//{
-		//	cout << "Unable to open file";
-		//}
-		//while (!myfile.eof())
-		//{
-		//	getline(myfile, name);
-		//	while (name == "")
-		//	{
-		//		getline(myfile, name);
-		//	}
-		//	myfile >> price;
-		//	insert(name, price);
-		//}
-
-		//myfile.open("karachi.txt");
-		//if (!myfile)
-		//{
-		//	cout << "Unable to open file";
-		//}
-		//while (!myfile.eof())
-		//{
-		//	getline(myfile, name);
-		//	while (name == "")
-		//	{
-		//		getline(myfile, name);
-		//	}
-		//	myfile >> price;
-		//	insert(name, price);
-		//}
 	}
 
 	// Displaying Whole Linked List 
