@@ -3,6 +3,7 @@
 #include<sstream>
 #include<fstream>
 #include<iomanip>
+#include<stack>
 #include <SFML/Graphics.hpp>
 #include<SFML/Window.hpp>
 
@@ -17,8 +18,8 @@ struct node
 	/*
 	Discount
 
-	
 	*/
+
 	string data;
 	int price;
 	string location;
@@ -41,12 +42,14 @@ struct node
 class readData //reads data from file and stores in LL
 {
 private:
-	node* head, *tail;
+	node* head, * tail;
+	int size;
 public:
 	readData()
 	{
 		head = NULL;
 		tail = NULL;
+		size = 0;
 	}
 	void insert(string name, int price, string Location, int Capacity)
 	{
@@ -68,6 +71,7 @@ public:
 			tail->next = temp;
 			tail = temp;
 		}
+		size++;
 	}
 
 	// Reading the Data From the FILE
@@ -103,7 +107,7 @@ public:
 		temp = head;
 		while (temp != NULL)
 		{
-			cout << temp->data << "\t\n";
+			cout<<"\t\t" << temp->data << "\t\n";
 			temp = temp->next;
 		}
 	}
@@ -112,34 +116,47 @@ public:
 	{
 		node* temp = new node;
 		temp = head;
+		stack<string> s;
+		int i = 1;
+		string select;
 		cout << "\t\tWe Find the Marquees According to Your Location" << endl << endl;
 		while (temp != NULL)
 		{
+			
 			if (temp->location == Location)
 			{
-				cout << temp->data << "\t\n";
+				cout<<"\t\t"<<i<<"- "<< temp->data << "\t\n";
+				i++;
+				s.push(temp->data);
 			}
-			temp = temp->next;
+			temp = temp->next;	
 		}
+		cin.ignore();
+		cout << "Enter name of marquee to select: ";
+		getline(cin, select);
+		search_byName(select);
 	}
+
 
 	void Display_By_Price(int min, int max)
 	{
 		node* temp = new node;
 		temp = head;
+		string select;
 		cout << "\t\tWe Find the Marquees According to Your Price Range" << endl << endl;
 		while (temp != NULL)
 		{
-			if (temp->price >= min && temp->price <= max  )
+			if (temp->price >= min && temp->price <= max)
 			{
-				cout << temp->data << "\t\n";
+				cout << "\t\t" << temp->data << "\t\n";
 			}
 			temp = temp->next;
 		}
+		cin.ignore();
+		cout << "Enter name of marquee to select: ";
+		getline(cin, select);
+		search_byName(select);
 	}
-
-
-
 	void search_byName(string Marquee)
 	{
 		// Making A Temporary Node (pointing Head Of Linked List)
@@ -150,7 +167,7 @@ public:
 		{
 			if (temp->data == Marquee)
 			{
-				cout << "\t\tMarquee Found\n\t\tName: " << temp->data <<endl<< "\t\t Price: " << temp->price << endl;
+				cout << "\t\tMarquee Found\n\t\tName: " << temp->data << "\t Price: " << temp->price << "\t Location: " <<temp->location<<"\tCapacity: "<<temp->Capacity<< endl;
 				return;
 			}
 			temp = temp->next;
@@ -167,15 +184,16 @@ void mainMenu()
 
 	readData obj;
 	obj.read();
-	sf::RenderWindow window(sf::VideoMode(1020, 720), "Marquee Recommendation System", sf::Style::Close | sf::Style::Titlebar | sf::Style::Resize);
+	sf::RenderWindow window(sf::VideoMode(900, 520), "Marquee Recommendation System", sf::Style::Close | sf::Style::Titlebar | sf::Style::Resize);
 	sf::Font font;
 	font.loadFromFile("Pinkerston.ttf");
 	//throw("Could not load Font\n");
 
-	sf::Texture Tex;
-	Tex.loadFromFile("E:\Mutton.jpg");	
-	sf::Sprite sprite(Tex);
-		
+
+	/*sf::Texture Tex;
+	tex.loadFromFile("E:\Mutton.jpg");
+	sf::Sprite sprite(Tex);*/
+
 	sf::Text text;
 	text.setFont(font);
 	text.setCharacterSize(35);
@@ -203,6 +221,7 @@ void mainMenu()
 				window.close();
 			}
 		}
+		//window.draw(sprite);
 		window.draw(text);
 		window.draw(text1);
 		window.display();
@@ -263,7 +282,7 @@ void mainMenu()
 			else if (choice == 0)
 				exit(0);
 
-		}while (choice != 0);
+		} while (choice != 0);
 	}
 }
 
