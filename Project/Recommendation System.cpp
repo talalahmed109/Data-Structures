@@ -53,27 +53,64 @@ public:
 		}
 	}
 
-	void read()
+	void read(int opt)
 	{
 		ifstream myfile;
-		myfile.open("data.txt");
-		if (!myfile)
-		{
-			cout << "Unable to open file";
-		}
 		string name;
 		int price;
-		while(!myfile.eof())
+		if (opt == 1)
 		{
-			getline(myfile,name);
-			while (name == "")
+			myfile.open("islamabad.txt");
+			if (!myfile)
+			{
+				cout << "Unable to open file";
+			}
+			while (!myfile.eof())
 			{
 				getline(myfile, name);
+				while (name == "")
+				{
+					getline(myfile, name);
+				}
+				myfile >> price;
+				insert(name, price);
 			}
-
-			myfile >> price;
-			
-			insert(name,price);
+		}
+		else if (opt == 2)
+		{
+			myfile.open("lahore.txt");
+			if (!myfile)
+			{
+				cout << "Unable to open file";
+			}
+			while (!myfile.eof())
+			{
+				getline(myfile, name);
+				while (name == "")
+				{
+					getline(myfile, name);
+				}
+				myfile >> price;
+				insert(name, price);
+			}
+		}
+		else if (opt == 3)
+		{
+			myfile.open("karachi.txt");
+			if (!myfile)
+			{
+				cout << "Unable to open file";
+			}
+			while (!myfile.eof())
+			{
+				getline(myfile, name);
+				while (name == "")
+				{
+					getline(myfile, name);
+				}
+				myfile >> price;
+				insert(name, price);
+			}
 		}
 	}
 	void display()
@@ -88,20 +125,20 @@ public:
 	}
 	void search_byName(string Marquee)
 	{
-
 		// Making A Temporary Node (pointing Head Of Linked List)
 		node* temp = head;
-		// Searching the Speacific 
+		// Searching the Speacific
+		
 		while (temp != NULL)
 		{
 			if (temp->data == Marquee)
 			{
-				cout << "Marquee Found\nName: " << temp->data << " Price: "<<temp->cost << endl;
+				cout << "\t\tMarquee Found\n\t\tName: " << temp->data << " Price: "<<temp->cost << endl;
 				return;
 			}
 			temp = temp->next;
 		}
-		cout << "Marquee Not Found" << endl;
+		cout << "\n\t\tMarquee Not Found" << endl;
 		return;
 	}
 };
@@ -152,17 +189,32 @@ void mainMenu()
 			cin >> choice;
 			if (choice == 1)
 			{
-				string marqeeName;
-				obj.read();
-				obj.display();
-				cin.ignore();
-				cout << "Enter the Marqee Name = ";
-				getline(cin, marqeeName);
-				obj.search_byName(marqeeName);
+				A:int opt;
+				cout << "\n\n\t\t\tSelect city: \n";
+				cout << "\n\t\t\t1. Islamabad\n"
+					"\t\t\t2. Lahore\n"
+					"\t\t\t3. Karachi\n"
+					"\t\t\tChoice: ";
+				cin >> opt;
+				if (opt == 1 || opt==2 || opt==3)
+				{
+					string marqeeName;
+					obj.read(opt);
+					//obj.display();
+					cin.ignore();
+					cout << "\n\t\tEnter the Marqee Name = ";
+					getline(cin, marqeeName);
+					obj.search_byName(marqeeName);
+				}
+				else
+				{
+					cout << "\n\t\t\tInvalid choice!!\n";
+					goto A;
+				}
 			}
 			else if (choice == 2)
 			{
-				cout << "\t\tUnder Development\n";
+				goto A;
 			}
 			else if (choice == 3)
 			{
@@ -183,7 +235,3 @@ int main()
 	
 	return 0;
 }
-
-
-
-
