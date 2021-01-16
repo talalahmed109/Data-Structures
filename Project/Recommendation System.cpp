@@ -1,20 +1,19 @@
+						//M Zaeem Nasir 19F-0355
+						//Talal Ahmed	19F-0245	
 #include<iostream>
 #include<string>
 #include<sstream>
 #include<fstream>
-#include<iomanip>
-#include<stack>
+#include<stdlib.h>
 #include <SFML/Graphics.hpp>
 #include<SFML/Window.hpp>
 
 using namespace std;
 
-
 // Making Node OF MArquee
 
 struct node
 {
-
 	/*
 	Discount
 
@@ -37,6 +36,119 @@ struct node
 
 };
 
+
+class graphMatrix
+{
+private:
+	int N;//vertix
+	int M;//edgesss
+	int** matrix;
+public:
+	graphMatrix()
+	{
+		N = 0;
+		M = 0;
+	}
+	void insert(int n)
+	{
+		N = n;
+		matrix = new int* [N];
+		for (int i = 0; i < N; i++)
+		{
+			matrix[i] = new int[N];
+		}
+		for (int i = 0; i < N; i++)
+		{
+			for (int j = 0; j < N; j++)
+			{
+				matrix[i][j] = 0;
+			}
+		}
+	}
+	void distance(int opt, string location)
+	{
+		if (opt == 1)
+		{
+			if (location == "ISLAMABAD")
+				cout << "\tThe Marquee is in your City\n";
+			else if (location == "LAHORE")
+				cout << "Distance from your current Location: " << matrix[0][1]<<" Kilometers\n";
+			else if(location == "KARACHI")
+				cout << "Distance from your current Location: " << matrix[0][2]<<" Kilometers\n";
+			else if(location == "MULTAN")
+				cout << "Distance from your current Location: " << matrix[0][3]<<" Kilometers\n";
+			else if(location=="MURREE")
+				cout << "Distance from your current Location: " << matrix[0][4]<<" Kilometers\n";
+		}
+		else if (opt == 2)
+		{
+			if (location == "ISLAMABAD")
+				cout << "Distance from your current Location: " << matrix[1][0] << " Kilometers\n";
+			else if (location == "LAHORE")
+				cout << "\tThe Marquee is in your City\n";
+			else if (location == "KARACHI")
+				cout << "Distance from your current Location: " << matrix[1][2] << " Kilometers\n";
+			else if (location == "MULTAN")
+				cout << "Distance from your current Location: " << matrix[1][3] << " Kilometers\n";
+			else if (location == "MURREE")
+				cout << "Distance from your current Location: " << matrix[1][4] << " Kilometers\n";
+		}
+		else if (opt == 3)
+		{
+			if (location == "ISLAMABAD")
+				cout << "Distance from your current Location: " << matrix[2][0] << " Kilometers\n";
+			else if (location == "LAHORE")
+				cout << "Distance from your current Location: " << matrix[2][1] << " Kilometers\n";
+			else if (location == "KARACHI")
+				cout << "\tThe Marquee is in your City\n";
+			else if (location == "MULTAN")
+				cout << "Distance from your current Location: " << matrix[2][3] << " Kilometers\n";
+			else if (location == "MURREE")
+				cout << "Distance from your current Location: " << matrix[2][4] << " Kilometers\n";
+		}
+		else if (opt == 4)
+		{
+			if (location == "ISLAMABAD")
+				cout << "Distance from your current Location: " << matrix[3][0] << " Kilometers\n";
+			else if (location == "LAHORE")
+				cout << "Distance from your current Location: " << matrix[3][1] << " Kilometers\n";
+			else if (location == "KARACHI")
+				cout << "Distance from your current Location: " << matrix[3][2] << " Kilometers\n";
+			else if (location == "MULTAN")
+				cout << "\tThe Marquee is in your City\n";
+			else if (location == "MURREE")
+				cout << "Distance from your current Location: " << matrix[3][4] << " Kilometers\n";
+		}
+		else if (opt == 5)
+		{
+			if (location == "ISLAMABAD")
+				cout << "Distance from your current Location: " << matrix[4][0] << " Kilometers\n";
+			else if (location == "LAHORE")
+				cout << "Distance from your current Location: " << matrix[4][1] << " Kilometers\n";
+			else if (location == "KARACHI")
+				cout << "Distance from your current Location: " << matrix[4][2] << " Kilometers\n";
+			else if (location == "MULTAN")
+				cout << "Distance from your current Location: " << matrix[4][3] << " Kilometers\n";
+			else if (location == "MURREE")
+				cout << "\tThe Marquee is in your City\n";
+		}
+		else
+			cout << "Wrong INPUT" << endl;
+
+	}
+	void addEdge(int a, int b, int w)
+	{
+
+		for (int i = 0; i < N; i++)
+		{
+			for (int j = 0; j <= N; j++)
+			{
+				matrix[a][b] = w;
+				matrix[b][a] = w;
+			}
+		}
+	}
+};
 
 
 class readData //reads data from file and stores in LL
@@ -114,9 +226,10 @@ public:
 
 	void Display_By_Location(string Location)
 	{
+		system("cls");
 		node* temp = new node;
 		temp = head;
-		stack<string> s;
+		graphMatrix G;
 		int i = 1;
 		string select;
 		cout << "\t\tWe Find the Marquees According to Your Location" << endl << endl;
@@ -127,37 +240,59 @@ public:
 			{
 				cout<<"\t\t"<<i<<"- "<< temp->data << "\t\n";
 				i++;
-				s.push(temp->data);
 			}
 			temp = temp->next;	
 		}
 		cin.ignore();
-		cout << "Enter name of marquee to select: ";
+		cout << "\t\tEnter name of marquee to select: ";
 		getline(cin, select);
-		search_byName(select);
+		Select(select);
+		int opt;
+		cout << "\n\n\t\t\tSelect Your current Location: \n";
+		cout << "\n\t\t\t1. Islamabad\n"
+			"\t\t\t2. Lahore\n"
+			"\t\t\t3. Karachi\n"
+			"\t\t\t4. Multan\n"
+			"\t\t\t5. Murree\n"
+			"\t\t\tChoice: ";
+		cin >> opt;
+		G.insert(5);
+		G.addEdge(0, 0, 1);
+		G.addEdge(0, 1, 375);
+		G.addEdge(0, 2, 1410);
+		G.addEdge(0, 3, 537);
+		G.addEdge(0, 4, 64);
+		G.addEdge(1, 2, 1200);
+		G.addEdge(1, 3, 337);
+		G.addEdge(1, 4, 438);
+		G.addEdge(2, 3, 883);
+		G.addEdge(2, 4, 1470);
+		G.addEdge(3, 4, 601);
+		G.distance(opt,Location);
 	}
-
-
 	void Display_By_Price(int min, int max)
 	{
+		system("cls");
 		node* temp = new node;
 		temp = head;
+		int i = 1;
 		string select;
 		cout << "\t\tWe Find the Marquees According to Your Price Range" << endl << endl;
 		while (temp != NULL)
 		{
 			if (temp->price >= min && temp->price <= max)
 			{
-				cout << "\t\t" << temp->data << "\t\n";
+				cout << "\t\t"<<i<<"- "  << temp->data <<"\tPrice: "<<temp->price<< " per person\n";
 			}
 			temp = temp->next;
+			i++;
 		}
 		cin.ignore();
-		cout << "Enter name of marquee to select: ";
+		cout << "\t\tEnter name of marquee to select: ";
 		getline(cin, select);
-		search_byName(select);
+		Select(select);
 	}
-	void search_byName(string Marquee)
+	bool search_byName(string Marquee)
 	{
 		// Making A Temporary Node (pointing Head Of Linked List)
 		node* temp = head;
@@ -167,17 +302,37 @@ public:
 		{
 			if (temp->data == Marquee)
 			{
-				cout << "\t\tMarquee Found\n\t\tName: " << temp->data << "\t Price: " << temp->price << "\t Location: " <<temp->location<<"\tCapacity: "<<temp->Capacity<< endl;
+				cout << "\n\t\t\tMarquee Details: ";
+				cout << "\n\t\tName: " << temp->data << "\t Price: " << temp->price<<" per person" << "\t Location: " <<temp->location<<"\tCapacity: "<<temp->Capacity<< endl;
+				return 1;
+			}
+			temp = temp->next;
+		}
+		return 0;
+	}
+
+	void Select(string Marquee)
+	{
+		int guests = 0, total = 0;
+		string loc;
+		graphMatrix G;
+		node* temp = head;
+		while (temp != NULL)
+		{
+			if (temp->data == Marquee)
+			{
+				cout << "\n\t\t\tMarquee Details: ";
+				cout << "\n\t\tName: " << temp->data << "\t Price: " << temp->price << " per person" << "\t Location: " << temp->location << "\tCapacity: " << temp->Capacity << endl;
+				cout << "\t\tEnter the number of guests:  "; cin >> guests;
+				total = guests * temp->price;
+				cout << "\n\t\tYour Total Bill: " << total;
 				return;
 			}
 			temp = temp->next;
 		}
-		cout << "\n\t\tMarquee Not Found" << endl;
 		return;
 	}
 };
-
-
 
 void mainMenu()
 {
@@ -187,12 +342,6 @@ void mainMenu()
 	sf::RenderWindow window(sf::VideoMode(900, 520), "Marquee Recommendation System", sf::Style::Close | sf::Style::Titlebar | sf::Style::Resize);
 	sf::Font font;
 	font.loadFromFile("Pinkerston.ttf");
-	//throw("Could not load Font\n");
-
-
-	/*sf::Texture Tex;
-	tex.loadFromFile("E:\Mutton.jpg");
-	sf::Sprite sprite(Tex);*/
 
 	sf::Text text;
 	text.setFont(font);
@@ -221,15 +370,14 @@ void mainMenu()
 				window.close();
 			}
 		}
-		//window.draw(sprite);
 		window.draw(text);
 		window.draw(text1);
 		window.display();
 		int choice;
-
+		
 		do
 		{
-			cout << "\n\t\tChoice: ";
+			cout << "\n\t\tChoice from Menu: ";
 			cin >> choice;
 			if (choice == 1)
 			{
@@ -238,7 +386,12 @@ void mainMenu()
 				cin.ignore();
 				cout << "\n\t\tEnter the Marqee Name = ";
 				getline(cin, marqeeName);
-				obj.search_byName(marqeeName);
+				if(obj.search_byName(marqeeName))
+				{
+					cout << "\n\t\tMarquee Found" << endl;
+				}
+				else
+					cout << "\n\t\tMarquee Not Found" << endl;
 			}
 			else if (choice == 2)
 			{
@@ -288,6 +441,7 @@ void mainMenu()
 
 int main()
 {
+	system("Color 09");
 	mainMenu();
 	return 0;
 }
