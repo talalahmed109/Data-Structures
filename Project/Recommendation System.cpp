@@ -1,14 +1,16 @@
-						//M Zaeem Nasir 19F-0355
-						//Talal Ahmed	19F-0245	
+							//M Zaeem Nasir 19F-0355
+							//Talal Ahmed	19F-0245	
 #include<iostream>
 #include<string>
 #include<sstream>
 #include<fstream>
 #include<stdlib.h>
+#include<iomanip>
 #include <SFML/Graphics.hpp>
 #include<SFML/Window.hpp>
 
 using namespace std;
+void Select(string);
 
 // Making Node OF MArquee
 
@@ -16,7 +18,6 @@ struct node
 {
 	/*
 	Discount
-
 	*/
 
 	string data;
@@ -36,12 +37,16 @@ struct node
 
 };
 
+struct Bracket {
+	// this brNacket will contain the Address of the node(Linked List)
+	node*next=NULL;
+};
 
 class graphMatrix
 {
 private:
-	int N;//vertix
-	int M;//edgesss
+	int N;		//vertix
+	int M;		//edgesss
 	int** matrix;
 public:
 	graphMatrix()
@@ -52,7 +57,7 @@ public:
 	void insert(int n)
 	{
 		N = n;
-		matrix = new int* [N];
+		matrix = new int*[N];
 		for (int i = 0; i < N; i++)
 		{
 			matrix[i] = new int[N];
@@ -72,13 +77,13 @@ public:
 			if (location == "ISLAMABAD")
 				cout << "\tThe Marquee is in your City\n";
 			else if (location == "LAHORE")
-				cout << "Distance from your current Location: " << matrix[0][1]<<" Kilometers\n";
-			else if(location == "KARACHI")
-				cout << "Distance from your current Location: " << matrix[0][2]<<" Kilometers\n";
-			else if(location == "MULTAN")
-				cout << "Distance from your current Location: " << matrix[0][3]<<" Kilometers\n";
-			else if(location=="MURREE")
-				cout << "Distance from your current Location: " << matrix[0][4]<<" Kilometers\n";
+				cout << "Distance from your current Location: " << matrix[0][1] << " Kilometers\n";
+			else if (location == "KARACHI")
+				cout << "Distance from your current Location: " << matrix[0][2] << " Kilometers\n";
+			else if (location == "MULTAN")
+				cout << "Distance from your current Location: " << matrix[0][3] << " Kilometers\n";
+			else if (location == "MURREE")
+				cout << "Distance from your current Location: " << matrix[0][4] << " Kilometers\n";
 		}
 		else if (opt == 2)
 		{
@@ -150,12 +155,87 @@ public:
 	}
 };
 
+class Hashing
+{
+private:
+public:
+	Bracket *Brackets;
+	Hashing()
+	{
+		// Default Constructor 
+		// it will make brackets of size 26
+		Brackets = new Bracket[26];
+	}
+
+	// Hash Function 
+	// This Function will Generate Index 
+
+	int hash_key(char data)
+	{
+		int index;
+		// A - B
+		if (data >= 65 && data <= 90)
+		{
+			index = data - 65;
+			return index;
+		}
+		// a - b
+		else if (data >= 97 && data <= 122)
+		{
+			index = data - 97;
+			return index;
+		}
+		else
+		{
+			cout << " Wrong Input " << endl;
+		}
+
+	}
+
+	// the string data peremerter is a perameter which is used to insert data into the hashing bracket
+
+	void insert(string data,string name, int price, string Location, int Capacity)
+	{
+		int index = hash_key(data[0]); // now getting Index According to the 1st index of name
+		// of Marquee
+		node* newNode = new node;
+		newNode->data = name;
+		newNode->price = price;
+		newNode->location = Location;
+		newNode->Capacity = Capacity;
+		newNode->next = NULL;
+
+		// if the Bracket index is NULL
+		if (Brackets[index].next == NULL)
+		{
+			Brackets[index].next = newNode;
+		}
+
+		// IF the Bracket index is not NULL 
+		// then Traverse the Linked List until Null Found 
+		// And Insert The newNode when Null Found 
+		else
+		{
+			node* temp = Brackets[index].next;
+			// Traversing the Linked List					// Now Adding Linked List to the Bracket
+			while (temp->next != NULL)						// 0
+			{												// 1  -> Linked List []->[]
+				temp = temp->next;							// 2
+			}												// 3
+			temp->next = newNode;
+		}
+	}
+};
+
+
+
 
 class readData //reads data from file and stores in LL
 {
 private:
-	node* head, * tail;
+	node* head, *tail;
 	int size;
+	Hashing HASH;
 public:
 	readData()
 	{
@@ -206,23 +286,43 @@ public:
 			getline(myfile, location);
 			myfile >> price;
 			myfile >> capacity;
+
+			// inserting into the hash table 
+			// And Creating indexes According to the 
+			// Name of the Marquee
+			
+			HASH.insert(name, name, price, location, capacity);
 			insert(name, price, location, capacity);
 			myfile.ignore();
+			
 		}
 		myfile.close();
 	}
 
-	// Displaying Whole Linked List 
 	void display()
 	{
-		node* temp = new node;
-		temp = head;
-		while (temp != NULL)
+		for (int index = 0; index < 26; index++)
 		{
-			cout<<"\t\t" << temp->data << "\t\n";
-			temp = temp->next;
+			node* temp = HASH.Brackets[index].next;
+			cout << "AT INDEX " << index << ": " << endl << endl;
+
+			if (temp == NULL)
+			{
+				cout << ":---EMPTY---:" << endl;
+			}
+
+			while (temp != NULL)
+			{
+				cout << "Name:" << temp->data << endl;
+				cout << "Per Head Price:" << temp->price << endl;
+				cout << "Total Capacity :" << temp->Capacity << endl;
+				cout << "Location :" << temp->location << endl;
+				temp = temp->next;
+			}
+			cout << endl << "--------------" << endl << endl;
 		}
 	}
+
 
 	void Display_By_Location(string Location)
 	{
@@ -235,13 +335,12 @@ public:
 		cout << "\t\tWe Find the Marquees According to Your Location" << endl << endl;
 		while (temp != NULL)
 		{
-			
 			if (temp->location == Location)
 			{
-				cout<<"\t\t"<<i<<"- "<< temp->data << "\t\n";
+				cout << "\t\t" << i << "- " << temp->data << "\t\n";
 				i++;
 			}
-			temp = temp->next;	
+			temp = temp->next;
 		}
 		cin.ignore();
 		cout << "\t\tEnter name of marquee to select: ";
@@ -268,8 +367,9 @@ public:
 		G.addEdge(2, 3, 883);
 		G.addEdge(2, 4, 1470);
 		G.addEdge(3, 4, 601);
-		G.distance(opt,Location);
+		G.distance(opt, Location);
 	}
+
 	void Display_By_Price(int min, int max)
 	{
 		system("cls");
@@ -282,7 +382,7 @@ public:
 		{
 			if (temp->price >= min && temp->price <= max)
 			{
-				cout << "\t\t"<<i<<"- "  << temp->data <<"\tPrice: "<<temp->price<< " per person\n";
+				cout << "\t\t" << i << "- " << temp->data << "\tPrice: " << temp->price << " per person\n";
 			}
 			temp = temp->next;
 			i++;
@@ -292,24 +392,24 @@ public:
 		getline(cin, select);
 		Select(select);
 	}
+
 	bool search_byName(string Marquee)
 	{
-		// Making A Temporary Node (pointing Head Of Linked List)
-		node* temp = head;
-		// Searching the Speacific
-
+		int index = HASH.hash_key(Marquee[0]);
+		node* temp = HASH.Brackets[index].next;
 		while (temp != NULL)
 		{
 			if (temp->data == Marquee)
 			{
-				cout << "\n\t\t\tMarquee Details: ";
-				cout << "\n\t\tName: " << temp->data << "\t Price: " << temp->price<<" per person" << "\t Location: " <<temp->location<<"\tCapacity: "<<temp->Capacity<< endl;
-				return 1;
+				Select(Marquee);
+				return true;
 			}
 			temp = temp->next;
 		}
-		return 0;
+		cout << "Not Found Marquee" << endl;
 	}
+
+
 
 	void Select(string Marquee)
 	{
@@ -322,7 +422,7 @@ public:
 			if (temp->data == Marquee)
 			{
 				cout << "\n\t\t\tMarquee Details: ";
-				cout << "\n\t\tName: " << temp->data << "\t Price: " << temp->price << " per person" << "\t Location: " << temp->location << "\tCapacity: " << temp->Capacity << endl;
+				cout << "\n\t\tName: " << temp->data<<setw(15) << " Price: " << temp->price << " per person"<<setw(15) << " Location: " << temp->location<<setw(15) << "Capacity: " << temp->Capacity << endl;
 				cout << "\t\tEnter the number of guests:  "; cin >> guests;
 				total = guests * temp->price;
 				cout << "\n\t\tYour Total Bill: " << total;
@@ -333,6 +433,7 @@ public:
 		return;
 	}
 };
+
 
 void mainMenu()
 {
@@ -374,7 +475,6 @@ void mainMenu()
 		window.draw(text1);
 		window.display();
 		int choice;
-		
 		do
 		{
 			cout << "\n\t\tChoice from Menu: ";
@@ -382,13 +482,12 @@ void mainMenu()
 			if (choice == 1)
 			{
 				string marqeeName;
-				obj.display();
+				//obj.display();
 				cin.ignore();
 				cout << "\n\t\tEnter the Marqee Name = ";
 				getline(cin, marqeeName);
-				if(obj.search_byName(marqeeName))
+				if (obj.search_byName(marqeeName))
 				{
-					cout << "\n\t\tMarquee Found" << endl;
 				}
 				else
 					cout << "\n\t\tMarquee Not Found" << endl;
